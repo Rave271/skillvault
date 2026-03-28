@@ -55,6 +55,14 @@ export default function Dashboard({ account, contract }) {
 
   function notify(msg, type = "success") {
     setTxStatus({ msg, type });
+
+    if (type === "error") {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    }
+
     if (type !== "pending") {
       setTimeout(() => setTxStatus(null), 5000);
     }
@@ -198,7 +206,7 @@ export default function Dashboard({ account, contract }) {
       </nav>
 
       {txStatus && (
-        <div className={`toast toast-${txStatus.type}`}>
+        <div className={`toast toast-${txStatus.type}`} role="status" aria-live="polite">
           {txStatus.type === "pending" && <span className="spinner" />}
           {txStatus.msg}
         </div>

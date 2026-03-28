@@ -216,7 +216,16 @@ export default function LandingPage({ onConnect }) {
             <span>Minimal interface. Better hiring signal.</span>
           </div>
         </div>
-        <p>Built with Solidity, React, and ethers.js for a privacy-preserving hiring flow.</p>
+        <div className="footer-meta">
+          <p>Built with Solidity, React, and ethers.js for a privacy-preserving hiring flow.</p>
+          <div className="project-meta">
+            <span>By Raghav Verma</span>
+            <span className="divider">·</span>
+            <a href="https://github.com/Rave271/skillvault" target="_blank" rel="noreferrer">
+              GitHub Repository
+            </a>
+          </div>
+        </div>
       </footer>
     </div>
   );

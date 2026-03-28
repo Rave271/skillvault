@@ -175,6 +175,30 @@ export default function HelpGuide() {
           </div>
         </div>
       </section>
+
+      <section className="panel">
+        <div className="panel-header">
+          <div>
+            <h2 className="panel-title">Project details</h2>
+            <p className="panel-sub" style={{ marginBottom: 0 }}>
+              Reference details for the project and repository.
+            </p>
+          </div>
+        </div>
+
+        <div className="project-reference">
+          <div className="project-reference-row">
+            <span className="project-reference-label">Name</span>
+            <strong>Raghav Verma</strong>
+          </div>
+          <div className="project-reference-row">
+            <span className="project-reference-label">Repo</span>
+            <a href="https://github.com/Rave271/skillvault" target="_blank" rel="noreferrer">
+              github.com/Rave271/skillvault
+            </a>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
