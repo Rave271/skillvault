@@ -7,16 +7,19 @@ import MyProfiles from "../components/MyProfiles";
 import RevealIdentity from "../components/RevealIdentity";
 import History from "../components/History";
 import Endorse from "../components/Endorse";
+import HelpGuide from "../components/HelpGuide";
 import BrandMark from "../components/BrandMark";
+import AppIcon from "../components/AppIcon";
 
 const TABS = [
-  { id: "overview", label: "Overview", icon: "◌" },
-  { id: "browse", label: "Browse", icon: "◈" },
-  { id: "commit", label: "Post Profile", icon: "◎" },
-  { id: "mine", label: "My Work", icon: "◉" },
-  { id: "reveal", label: "Settle", icon: "◇" },
-  { id: "endorse", label: "Endorse", icon: "★" },
-  { id: "history", label: "History", icon: "⬡" },
+  { id: "overview", label: "Overview", icon: "overview" },
+  { id: "browse", label: "Browse", icon: "browse" },
+  { id: "commit", label: "Post Profile", icon: "commit" },
+  { id: "mine", label: "My Work", icon: "work" },
+  { id: "reveal", label: "Settle", icon: "reveal" },
+  { id: "endorse", label: "Endorse", icon: "endorse" },
+  { id: "history", label: "History", icon: "history" },
+  { id: "help", label: "Help", icon: "help" },
 ];
 
 export default function Dashboard({ account, contract }) {
@@ -27,15 +30,28 @@ export default function Dashboard({ account, contract }) {
   useNotifications(contract, account);
 
   useEffect(() => {
-    if (contract && account) loadReputation();
-  }, [contract, account]);
+    if (!contract || !account) return;
 
-  async function loadReputation() {
-    try {
-      const rep = await contract.getReputation(account);
-      setReputation(Number(rep));
-    } catch {}
-  }
+    let ignore = false;
+
+    async function loadReputation() {
+      try {
+        const rep = await contract.getReputation(account);
+
+        if (!ignore) {
+          setReputation(Number(rep));
+        }
+      } catch {
+        // Ignore transient network or wallet state while the session stabilizes.
+      }
+    }
+
+    loadReputation();
+
+    return () => {
+      ignore = true;
+    };
+  }, [contract, account]);
 
   function notify(msg, type = "success") {
     setTxStatus({ msg, type });
@@ -48,6 +64,83 @@ export default function Dashboard({ account, contract }) {
     if (value > 0) return "var(--green)";
     if (value < 0) return "var(--red)";
     return "var(--dim)";
+  }
+
+  function renderTabContent() {
+    if (tab === "overview") {
+      return (
+        <>
+          <section className="dashboard-hero">
+            <div className="dashboard-hero-copy">
+              <div className="dashboard-lockup">
+                <BrandMark className="brand-mark-mini" />
+                <span>Control room</span>
+              </div>
+              <span className="section-kicker">Workspace</span>
+              <h1 className="dashboard-title">Run private talent auctions from a workspace built like a trust desk.</h1>
+              <p className="dashboard-copy">
+                Post anonymous profiles, review live bids, settle completed matches, and
+                grow on-chain reputation from one lit, high-clarity workspace.
+              </p>
+            </div>
+
+            <div className="dashboard-hero-grid">
+              <div className="dashboard-stat-card">
+                <span className="dashboard-stat-label">Screening mode</span>
+                <strong className="dashboard-stat-value">Commit until reveal</strong>
+                <p className="dashboard-stat-copy">Profiles surface skills and stake first, personal data later.</p>
+              </div>
+              <div className="dashboard-stat-card">
+                <span className="dashboard-stat-label">Settlement rail</span>
+                <strong className="dashboard-stat-value">Escrow and release</strong>
+                <p className="dashboard-stat-copy">Bids, acceptance, disputes, and stake return stay on-chain.</p>
+              </div>
+              <div className="dashboard-stat-card">
+                <span className="dashboard-stat-label">Live session</span>
+                <strong className="dashboard-stat-value">{shortAddress(account)}</strong>
+                <p className="dashboard-stat-copy">
+                  Reputation {reputation === null ? "loading..." : reputation > 0 ? `+${reputation}` : reputation}
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <div className="panel panel-overview-note">
+            <h2 className="panel-title">Overview</h2>
+            <p className="panel-sub" style={{ marginBottom: 0 }}>
+              Use the tabs above to jump straight into browsing auctions, posting a profile,
+              settling jobs, or reviewing history.
+            </p>
+          </div>
+        </>
+      );
+    }
+
+    if (tab === "browse") {
+      return <BrowseAuctions contract={contract} account={account} notify={notify} />;
+    }
+
+    if (tab === "commit") {
+      return <CommitProfile contract={contract} notify={notify} />;
+    }
+
+    if (tab === "mine") {
+      return <MyProfiles contract={contract} account={account} notify={notify} />;
+    }
+
+    if (tab === "reveal") {
+      return <RevealIdentity contract={contract} account={account} notify={notify} />;
+    }
+
+    if (tab === "endorse") {
+      return <Endorse contract={contract} account={account} notify={notify} />;
+    }
+
+    if (tab === "history") {
+      return <History contract={contract} account={account} />;
+    }
+
+    return <HelpGuide />;
   }
 
   return (
@@ -86,17 +179,21 @@ export default function Dashboard({ account, contract }) {
       </header>
 
       <nav className="tab-nav">
-        <div className="tab-nav-inner">
-          {TABS.map((tabItem) => (
-            <button
-              key={tabItem.id}
-              className={`tab-btn ${tab === tabItem.id ? "active" : ""}`}
-              onClick={() => setTab(tabItem.id)}
-            >
-              <span className="tab-icon">{tabItem.icon}</span>
-              {tabItem.label}
-            </button>
-          ))}
+        <div className="tab-nav-shell">
+          <div className="tab-nav-inner">
+            {TABS.map((tabItem) => (
+              <button
+                key={tabItem.id}
+                className={`tab-btn ${tab === tabItem.id ? "active" : ""}`}
+                onClick={() => setTab(tabItem.id)}
+              >
+                <span className="tab-icon">
+                  <AppIcon name={tabItem.icon} />
+                </span>
+                {tabItem.label}
+              </button>
+            ))}
+          </div>
         </div>
       </nav>
 
@@ -108,66 +205,9 @@ export default function Dashboard({ account, contract }) {
       )}
 
       <main className="dash-content">
-        {tab === "overview" && (
-          <section className="dashboard-hero">
-            <div className="dashboard-hero-copy">
-              <div className="dashboard-lockup">
-                <BrandMark className="brand-mark-mini" />
-                <span>Control room</span>
-              </div>
-              <span className="section-kicker">Workspace</span>
-              <h1 className="dashboard-title">Run private talent auctions from a workspace built like a trust desk.</h1>
-              <p className="dashboard-copy">
-                Post anonymous profiles, review live bids, settle completed matches, and
-                grow on-chain reputation from one lit, high-clarity workspace.
-              </p>
-            </div>
-
-            <div className="dashboard-hero-grid">
-              <div className="dashboard-stat-card">
-                <span className="dashboard-stat-label">Screening mode</span>
-                <strong className="dashboard-stat-value">Commit until reveal</strong>
-                <p className="dashboard-stat-copy">Profiles surface skills and stake first, personal data later.</p>
-              </div>
-              <div className="dashboard-stat-card">
-                <span className="dashboard-stat-label">Settlement rail</span>
-                <strong className="dashboard-stat-value">Escrow and release</strong>
-                <p className="dashboard-stat-copy">Bids, acceptance, disputes, and stake return stay on-chain.</p>
-              </div>
-              <div className="dashboard-stat-card">
-                <span className="dashboard-stat-label">Live session</span>
-                <strong className="dashboard-stat-value">{shortAddress(account)}</strong>
-                <p className="dashboard-stat-copy">
-                  Reputation {reputation === null ? "loading..." : reputation > 0 ? `+${reputation}` : reputation}
-                </p>
-              </div>
-            </div>
-          </section>
-        )}
-
-        {tab === "overview" && <div className="panel panel-overview-note">
-          <h2 className="panel-title">Overview</h2>
-          <p className="panel-sub" style={{ marginBottom: 0 }}>
-            Use the tabs above to jump straight into browsing auctions, posting a profile,
-            settling jobs, or reviewing history.
-          </p>
-        </div>}
-        {tab === "browse" && (
-          <BrowseAuctions contract={contract} account={account} notify={notify} />
-        )}
-        {tab === "commit" && <CommitProfile contract={contract} notify={notify} />}
-        {tab === "mine" && (
-          <MyProfiles contract={contract} account={account} notify={notify} />
-        )}
-        {tab === "reveal" && (
-          <RevealIdentity contract={contract} account={account} notify={notify} />
-        )}
-        {tab === "endorse" && (
-          <Endorse contract={contract} account={account} notify={notify} />
-        )}
-        {tab === "history" && (
-          <History contract={contract} account={account} />
-        )}
+        <div key={tab} className="dashboard-stage">
+          {renderTabContent()}
+        </div>
       </main>
     </div>
   );

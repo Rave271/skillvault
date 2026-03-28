@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { ethers } from "ethers";
 import { formatEth, shortAddress, timeLeft } from "../utils/helpers";
 import { AuctionState } from "../utils/contract";
+import AppIcon from "./AppIcon";
 
 export default function MyProfiles({ contract, account, notify }) {
   const [profiles, setProfiles]     = useState([]);
@@ -131,7 +131,9 @@ export default function MyProfiles({ contract, account, notify }) {
   if (loading) return <div className="loading-state">Loading your profiles…</div>;
   if (profiles.length === 0) return (
     <div className="empty-state">
-      <div className="empty-icon">◉</div>
+      <div className="empty-icon">
+        <AppIcon name="work" />
+      </div>
       <h3>No profiles yet</h3>
       <p>Head to Post Profile to commit your first blind profile.</p>
     </div>
@@ -233,7 +235,12 @@ export default function MyProfiles({ contract, account, notify }) {
                           Accept
                         </button>
                       )}
-                      {b.matched && <span className="matched-tag">✓ Accepted</span>}
+                      {b.matched && (
+                        <span className="matched-tag">
+                          <AppIcon name="success" className="matched-tag-icon" />
+                          Accepted
+                        </span>
+                      )}
                     </div>
                   </div>
                 ))}

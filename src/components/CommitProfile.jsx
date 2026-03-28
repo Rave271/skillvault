@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ethers } from "ethers";
 import { generateSalt, generateCommitHash } from "../utils/helpers";
+import AppIcon from "./AppIcon";
 
 const SKILL_OPTIONS = [
   "Solidity", "React", "Node.js", "Python", "Rust", "Go",
@@ -83,7 +84,9 @@ export default function CommitProfile({ contract, notify }) {
   if (step === 3) {
     return (
       <div className="panel success-panel">
-        <div className="success-icon">✓</div>
+        <div className="success-icon">
+          <AppIcon name="success" />
+        </div>
         <h2>Profile committed on-chain</h2>
         <p>Your identity is hidden. Your reputation stake is locked until the job closes cleanly.</p>
         <div className="save-box">
@@ -201,7 +204,10 @@ export default function CommitProfile({ contract, notify }) {
         <label>Salt <span className="private-tag">private — save this</span></label>
         <div className="salt-row">
           <code className="salt-display">{salt}</code>
-          <button className="btn-ghost-sm" onClick={() => setSalt(generateSalt())}>↺ New</button>
+          <button className="btn-ghost-sm" onClick={() => setSalt(generateSalt())}>
+            <AppIcon name="refresh" className="button-icon-sm" />
+            New
+          </button>
         </div>
       </div>
 

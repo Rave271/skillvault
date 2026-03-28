@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import { formatEth, timeLeft, shortAddress } from "../utils/helpers";
 import { AuctionState } from "../utils/contract";
+import AppIcon from "./AppIcon";
 
 const SORT_OPTIONS = [
   { value: "endingSoon", label: "Ending soon" },
@@ -91,7 +92,9 @@ export default function BrowseAuctions({ contract, account, notify }) {
           });
 
           reputation = Number(rep);
-        } catch {}
+        } catch {
+          // Skip endorsement enrichment when those reads fail for a profile.
+        }
 
         items.push({
           auctionId: i,
@@ -171,7 +174,9 @@ export default function BrowseAuctions({ contract, account, notify }) {
   if (auctions.length === 0) {
     return (
       <div className="empty-state">
-        <div className="empty-icon">◎</div>
+        <div className="empty-icon">
+          <AppIcon name="browse" />
+        </div>
         <h3>No open auctions right now</h3>
         <p>Freelancers haven't posted profiles yet, or all auctions have closed.</p>
       </div>
@@ -182,7 +187,10 @@ export default function BrowseAuctions({ contract, account, notify }) {
     <div className="panel">
       <div className="panel-header">
         <h2 className="panel-title">Open Auctions</h2>
-        <button className="btn-ghost-sm" onClick={loadAuctions}>↺ Refresh</button>
+        <button className="btn-ghost-sm" onClick={loadAuctions}>
+          <AppIcon name="refresh" className="button-icon-sm" />
+          Refresh
+        </button>
       </div>
       <p className="panel-sub">
         Zero identity information is shown. Filter by skill, reputation, and verified endorsements
@@ -252,7 +260,9 @@ export default function BrowseAuctions({ contract, account, notify }) {
 
       {filteredAuctions.length === 0 ? (
         <div className="empty-state empty-state-inline">
-          <div className="empty-icon">◌</div>
+          <div className="empty-icon">
+            <AppIcon name="search" />
+          </div>
           <h3>No auctions match these filters</h3>
           <p>Try widening the skill search or lowering the reputation requirement.</p>
         </div>
@@ -294,7 +304,10 @@ export default function BrowseAuctions({ contract, account, notify }) {
                 })}
               </div>
 
-              <div className="stake-badge">◉ Stake locked: {formatEth(auction.stakeWei)}</div>
+              <div className="stake-badge">
+                <AppIcon name="stake" className="stake-badge-icon" />
+                <span>Stake locked: {formatEth(auction.stakeWei)}</span>
+              </div>
 
               <div className="auction-meta">
                 <div className="meta-item">

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { ethers } from "ethers";
 import { formatEth, shortAddress } from "../utils/helpers";
-import { AuctionState, DisputeResult } from "../utils/contract";
+import { DisputeResult } from "../utils/contract";
+import AppIcon from "./AppIcon";
 
 export default function History({ contract, account }) {
   const [events, setEvents]   = useState([]);
@@ -42,7 +42,7 @@ export default function History({ contract, account }) {
         ...committed.map(e => ({
           type:      "profile_committed",
           label:     "Profile posted",
-          icon:      "◎",
+          icon:      "profile",
           color:     "purple",
           block:     e.blockNumber,
           txHash:    e.transactionHash,
@@ -53,7 +53,7 @@ export default function History({ contract, account }) {
         ...bidsPlaced.map(e => ({
           type:      "bid_placed",
           label:     "Bid placed",
-          icon:      "◈",
+          icon:      "bid",
           color:     "blue",
           block:     e.blockNumber,
           txHash:    e.transactionHash,
@@ -64,7 +64,7 @@ export default function History({ contract, account }) {
         ...matched.map(e => ({
           type:      "matched",
           label:     "Bid accepted",
-          icon:      "✓",
+          icon:      "match",
           color:     "green",
           block:     e.blockNumber,
           txHash:    e.transactionHash,
@@ -75,7 +75,7 @@ export default function History({ contract, account }) {
         ...revealed.map(e => ({
           type:      "revealed",
           label:     "Identity revealed",
-          icon:      "◇",
+          icon:      "reveal",
           color:     "teal",
           block:     e.blockNumber,
           txHash:    e.transactionHash,
@@ -86,7 +86,7 @@ export default function History({ contract, account }) {
         ...released.map(e => ({
           type:      "payment_released",
           label:     "Payment released",
-          icon:      "⬡",
+          icon:      "payment",
           color:     "green",
           block:     e.blockNumber,
           txHash:    e.transactionHash,
@@ -97,7 +97,7 @@ export default function History({ contract, account }) {
         ...stakeReturned.map(e => ({
           type:      "stake_returned",
           label:     "Stake returned",
-          icon:      "◉",
+          icon:      "stake",
           color:     "teal",
           block:     e.blockNumber,
           txHash:    e.transactionHash,
@@ -108,7 +108,7 @@ export default function History({ contract, account }) {
         ...disputed.map(e => ({
           type:      "dispute_raised",
           label:     "Dispute raised",
-          icon:      "⚠",
+          icon:      "alert",
           color:     "amber",
           block:     e.blockNumber,
           txHash:    e.transactionHash,
@@ -119,7 +119,7 @@ export default function History({ contract, account }) {
         ...resolved.map(e => ({
           type:      "dispute_resolved",
           label:     "Dispute resolved",
-          icon:      "⬡",
+          icon:      "resolve",
           color:     Number(e.args.result) === 2 ? "red" : "green",
           block:     e.blockNumber,
           txHash:    e.transactionHash,
@@ -156,7 +156,10 @@ export default function History({ contract, account }) {
             Every action is permanently recorded on Sepolia. Click any row to view on Etherscan.
           </p>
         </div>
-        <button className="btn-ghost-sm" onClick={loadHistory}>↺ Refresh</button>
+        <button className="btn-ghost-sm" onClick={loadHistory}>
+          <AppIcon name="refresh" className="button-icon-sm" />
+          Refresh
+        </button>
       </div>
 
       <div className="history-filters">
@@ -168,7 +171,9 @@ export default function History({ contract, account }) {
 
       {!loading && filtered.length === 0 && (
         <div className="empty-state">
-          <div className="empty-icon">◎</div>
+          <div className="empty-icon">
+            <AppIcon name="history" />
+          </div>
           <h3>No activity yet</h3>
           <p>Transactions will appear here as the contract is used.</p>
         </div>
@@ -178,14 +183,19 @@ export default function History({ contract, account }) {
         <div className="history-list">
           {filtered.map((e, i) => (
             <div key={i} className="history-row" onClick={() => openTx(e.txHash)}>
-              <div className={`history-icon hc-${e.color}`}>{e.icon}</div>
+              <div className={`history-icon hc-${e.color}`}>
+                <AppIcon name={e.icon} />
+              </div>
               <div className="history-body">
                 <div className="history-label">{e.label}</div>
                 <div className="history-detail">{e.detail}</div>
               </div>
               <div className="history-right">
                 <div className="history-block">Block {e.block}</div>
-                <div className="history-link">↗ Etherscan</div>
+                <div className="history-link">
+                  <AppIcon name="external" className="history-link-icon" />
+                  Etherscan
+                </div>
               </div>
             </div>
           ))}
