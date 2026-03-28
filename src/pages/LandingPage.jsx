@@ -1,3 +1,5 @@
+import BrandMark from "../components/BrandMark";
+
 const STEPS = [
   {
     n: "01",
@@ -31,12 +33,16 @@ export default function LandingPage({ onConnect }) {
       <div className="ambient-bg ambient-bg-landing" aria-hidden="true">
         <div className="ambient-orb orb-primary" />
         <div className="ambient-orb orb-secondary" />
+        <div className="ambient-beam beam-left" />
+        <div className="ambient-beam beam-center" />
+        <div className="ambient-beam beam-right" />
         <div className="ambient-grid" />
+        <div className="ambient-vignette" />
       </div>
 
       <nav className="nav">
         <div className="nav-logo">
-          <span className="logo-icon">⬡</span>
+          <BrandMark />
           <div className="nav-brand">
             <span className="logo-text">SkillVault</span>
             <span className="logo-subtext">Privacy-first talent marketplace</span>
@@ -44,7 +50,7 @@ export default function LandingPage({ onConnect }) {
         </div>
 
         <div className="nav-actions">
-          <div className="nav-pill">Ethereum secured</div>
+          <div className="nav-pill">Blind-by-default protocol</div>
           <button className="btn-connect" onClick={onConnect}>
             Connect Wallet
           </button>
@@ -53,7 +59,18 @@ export default function LandingPage({ onConnect }) {
 
       <main className="hero hero-grid">
         <section className="hero-copy">
-          <div className="hero-tag">Powered by Ethereum · Bias-Free Hiring</div>
+          <div className="hero-brand-line">
+            <BrandMark className="brand-mark-large" />
+            <div className="hero-brand-copy">
+              <span className="hero-brand-label">SkillVault Studio</span>
+              <strong>Blind-by-default hiring for teams that care about real signal.</strong>
+            </div>
+          </div>
+
+          <div className="hero-tag-row">
+            <div className="hero-tag">Powered by Ethereum</div>
+            <div className="hero-tag hero-tag-subtle">Bias-resistant matching</div>
+          </div>
 
           <h1 className="hero-title">
             Your skills speak.
@@ -105,6 +122,21 @@ export default function LandingPage({ onConnect }) {
 
         <aside className="hero-visual" aria-label="Platform preview">
           <div className="hero-visual-frame">
+            <div className="visual-glow visual-glow-warm" />
+            <div className="visual-glow visual-glow-cool" />
+            <div className="visual-beam visual-beam-left" />
+            <div className="visual-beam visual-beam-right" />
+            <div className="visual-ring" />
+            <div className="visual-floor" />
+
+            <div className="visual-brand-badge">
+              <BrandMark className="brand-mark-mini" />
+              <div>
+                <span className="visual-brand-label">SkillVault Studio</span>
+                <strong>Neutral signal chamber</strong>
+              </div>
+            </div>
+
             <div className="visual-card visual-card-profile">
               <div className="visual-card-top">
                 <span className="visual-kicker">Blind profile</span>
@@ -115,6 +147,13 @@ export default function LandingPage({ onConnect }) {
                 <span>Solidity</span>
                 <span>React</span>
                 <span>DeFi</span>
+              </div>
+              <div className="visual-seal-row">
+                <span className="visual-seal-label">Identity shield</span>
+                <span className="visual-seal-meter">
+                  <span />
+                </span>
+                <strong>Locked</strong>
               </div>
               <div className="visual-metric-row">
                 <div>
@@ -170,6 +209,13 @@ export default function LandingPage({ onConnect }) {
       </section>
 
       <footer className="footer">
+        <div className="footer-brand">
+          <BrandMark className="brand-mark-footer" />
+          <div>
+            <strong>SkillVault</strong>
+            <span>Minimal interface. Better hiring signal.</span>
+          </div>
+        </div>
         <p>Built with Solidity, React, and ethers.js for a privacy-preserving hiring flow.</p>
       </footer>
     </div>

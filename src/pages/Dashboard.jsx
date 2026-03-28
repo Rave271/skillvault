@@ -7,6 +7,7 @@ import MyProfiles from "../components/MyProfiles";
 import RevealIdentity from "../components/RevealIdentity";
 import History from "../components/History";
 import Endorse from "../components/Endorse";
+import BrandMark from "../components/BrandMark";
 
 const TABS = [
   { id: "overview", label: "Overview", icon: "◌" },
@@ -54,12 +55,16 @@ export default function Dashboard({ account, contract }) {
       <div className="ambient-bg ambient-bg-dashboard" aria-hidden="true">
         <div className="ambient-orb orb-primary" />
         <div className="ambient-orb orb-secondary" />
+        <div className="ambient-beam beam-left" />
+        <div className="ambient-beam beam-center" />
+        <div className="ambient-beam beam-right" />
         <div className="ambient-grid" />
+        <div className="ambient-vignette" />
       </div>
 
       <header className="dash-header">
         <div className="nav-logo">
-          <span className="logo-icon">⬡</span>
+          <BrandMark />
           <div className="nav-brand">
             <span className="logo-text">SkillVault</span>
             <span className="logo-subtext">Blind hiring control room</span>
@@ -106,27 +111,31 @@ export default function Dashboard({ account, contract }) {
         {tab === "overview" && (
           <section className="dashboard-hero">
             <div className="dashboard-hero-copy">
+              <div className="dashboard-lockup">
+                <BrandMark className="brand-mark-mini" />
+                <span>Control room</span>
+              </div>
               <span className="section-kicker">Workspace</span>
-              <h1 className="dashboard-title">Manage private talent auctions with clearer state and stronger visual trust.</h1>
+              <h1 className="dashboard-title">Run private talent auctions from a workspace built like a trust desk.</h1>
               <p className="dashboard-copy">
-                Post anonymous profiles, review active bids, settle completed matches, and
-                grow on-chain reputation from one focused workspace.
+                Post anonymous profiles, review live bids, settle completed matches, and
+                grow on-chain reputation from one lit, high-clarity workspace.
               </p>
             </div>
 
             <div className="dashboard-hero-grid">
               <div className="dashboard-stat-card">
-                <span className="dashboard-stat-label">Identity model</span>
+                <span className="dashboard-stat-label">Screening mode</span>
                 <strong className="dashboard-stat-value">Commit until reveal</strong>
-                <p className="dashboard-stat-copy">Profiles show skills and stake first, personal data later.</p>
+                <p className="dashboard-stat-copy">Profiles surface skills and stake first, personal data later.</p>
               </div>
               <div className="dashboard-stat-card">
-                <span className="dashboard-stat-label">Payment flow</span>
+                <span className="dashboard-stat-label">Settlement rail</span>
                 <strong className="dashboard-stat-value">Escrow and release</strong>
                 <p className="dashboard-stat-copy">Bids, acceptance, disputes, and stake return stay on-chain.</p>
               </div>
               <div className="dashboard-stat-card">
-                <span className="dashboard-stat-label">Connected wallet</span>
+                <span className="dashboard-stat-label">Live session</span>
                 <strong className="dashboard-stat-value">{shortAddress(account)}</strong>
                 <p className="dashboard-stat-copy">
                   Reputation {reputation === null ? "loading..." : reputation > 0 ? `+${reputation}` : reputation}
